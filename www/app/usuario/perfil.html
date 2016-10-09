@@ -1,0 +1,141 @@
+<ion-view  title="Perfil">
+<ion-content overflow-scroll="true">
+<ion-tabs class="tabs-positive tabs-icon-top">
+<ion-tab title="Perfil" icon-on="icon ion-android-contact" icon-off="icon ion-android-contact">
+  <ion-content class="center bg">
+       <div class="row">
+          <div class="col">
+              <div  style="width: 140px; height:140px;display: inline-block;">  
+                          <div class="content-circle circle">     
+                              <p class="ranking">RANKING</p>
+                          <a href="javascript:;" ng-click="editarPerfil(usuario)">
+                      <img src="http:\\localhost:3000/images/usuarios/default.png" alt=""  class="circle responsive-img img-perfil animated bounceIn" width="100%" height="100%" ng-if="usuario.photo == 'false'">
+                      <img src="http:\\localhost:3000/image/usuarios/{{usuario._id}}.jpg" alt=""  class="circle responsive-img img-perfil animated bounceIn" width="100%" height="100%" ng-if="usuario.photo == 'true'">
+                 
+                  </a>
+                              <div class="ranking-num circle">1</div>    
+                          </div>
+                          <p class="name">{{usuario.nombres}}<br>{{usuario.apellidos}}</p>
+                  </div>
+              </div>
+          </div>
+          <div class="separador"></div>
+          <div class="row">
+              <div class="col">
+                  <div class="box-transparent">
+                  <a href="#/index/retos">
+                    ver
+                   </a>
+                  <table width="100%" border="0">
+                        <tr>
+                      <td colspan="2" style="color:#FCDD68">RETOS</td>
+                  </tr>
+                      <tr>
+                          <td><div class="num-big">{{usuario.partidos.jugados}}</div></td>
+                          <td><div class="num-big">{{usuario.partidos.ganados}}</div></td>
+                      </tr>
+                      <tr>
+                          <td>JUGADOS</td>
+                          <td>GANADOS</td>
+                      </tr>
+                  </table>                
+              </div>
+              <div class="box-transparent">
+                 <br>
+                      <div class="num-big enorme">{{usuario.partidos.ganados * 3}}</div>
+                      <br>
+                       PUNTOS
+              </div>
+              <button class="btn bg-btn-red" id="">BUSCAR AMIGOS</button>
+              </div>
+          </div>
+      </div>
+    </ion-content>
+</ion-tab>
+
+
+  <ion-tab title="Amigos" icon-on="icon ion-android-contacts" icon-off="icon ion-android-contacts">
+      <ion-content class="center bg">
+       <h2><span style='font-size: 16px;color:#FFF;'>RANKING</span><br>AMIGOS</h2>
+        <div class="separador" style="width:15%;margin-left: 42.5%;"></div>
+          <table width="100%" align="center" class="tabla">
+                        <tbody>
+                            <tr ng-repeat="item in amigos" ng-if="item.username != 'none@none.co'">
+                                <td width="28px" style="padding: 4px;"><div class="ranking-num-list circle">{{$index+1}}</div></td>
+                                <td width="52px;" height="52px;" >
+                                    <img src="http:\\localhost:3000/images/usuarios/default.png" alt="" class="circle" style="width:42px;height:42px;" ng-if="item.photo == 'false'">
+                                    <img src="http:\\localhost:3000/image/usuarios/{{item._id}}.jpg" alt="" class="circle" style="width:42px;height:42px;" ng-if="item.photo == 'true'">
+                                </td>
+                                <td align="left"><span style="margin-left: 10px;font-family: 'fg-mediun-cond'">{{item.nombres}} {{item.apellidos}}</span></td>
+                                <td align="left"><div class="num-list">{{item.puntaje}}</div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+        </ion-content>
+  </ion-tab>
+
+
+
+  <ion-tab title="Proximos retos" icon-on="icon ion-ios-football" icon-off="icon ion-ios-football">
+       <ion-content class="center bg">
+             <h2><span style='font-size: 16px;color:#FFF;'>PROXIMOS</span><br>PARTIDOS</h2>
+                      <div class="separador" style="width:15%;margin-left: 42.5%;"></div>
+
+                 <div ng-if="proximosPartidos.length == 0">
+                    No Hay proximos Partidos
+                </div>
+                <table width="90%" align="center" style="margin-top:20px;"  ng-repeat="item in proximosPartidos" class="border-piso-puntos">
+                    <tr>
+                        <td colspan="3">
+                          {{item.reserva.fecha.dia}}/{{item.reserva.fecha.mes}}/{{item.reserva.fecha.anio}} - {{item.reserva.hora.desde}}
+                       </td>
+                    </tr>
+                    <tr>
+                      <td colspan="3"> <span style=" color:#FCDD68;font-family: 'fg-book';">Sitio : </span>{{item.reserva.sitio.nombre}}</td>
+                          
+                      </tr>
+                      <tr>
+                        <td colspan="3"> <span style=" color:#FCDD68;font-family: 'fg-book';">Cancha : </span>{{item.reserva.cancha.nombre}}</td>
+                      </tr>
+                      
+                    <tr>
+                        <td>
+                          <img src="http:\\localhost:3000/image/usuarios/nomina-profile.png" alt="" style="width:70px;border-radius:10px;border:5px solid #2C3B3C" ng-if="item.retator.escudo == 'false'"/>
+                         <img src="http:\\localhost:3000/image/nominas/{{item.retador._id}}.jpg" alt="" style=" width: 70px;border-radius:10px;border:5px solid #2C3B3C" ng-if="item.retador.escudo == 'true'"/>
+                        </td>
+                        <td width="10%">
+                          <h1 style="font-size:26px;">VS</h1>
+                           
+                        </td>
+                         <td>
+                          <img src="http:\\localhost:3000/image/usuarios/nomina-profile.png" alt="" style="width:70px;border-radius:10px;border:5px solid #2C3B3C" ng-if="item.retato.escudo == 'false'"/>
+                         <img src="http:\\localhost:3000/image/nominas/{{item.retado._id}}.jpg" alt="" style=" width: 70px;border-radius:10px;border:5px solid #2C3B3C" ng-if="item.retado.escudo == 'true'"/>
+                        </td>
+                    </tr>
+                      <tr>
+                          <td>{{item.retador.nombre}}</td>
+                          <td></td>
+                          <td>{{item.retado.nombre}}</td>
+                      </tr>
+                       <tr>
+                           <td colspan="3"> {{item.pago}}<div class="num-big">{{item.puntos}}</div>Puntos en Juego</td>
+                      </tr>
+                      <tr>
+                          <td colspan="3">
+                      <center>
+                          <span class="reloj" style="color:transparent">{{item.reserva.fecha.mes}}/{{item.reserva.fecha.dia}}/{{item.reserva.fecha.anio}} {{item.reserva.hora.hasta}}</span>
+                      </center>
+                      <div ng-if="hora == item.reserva.hora.desde" style="font-size:16px;">
+                        Partido en Curso
+                      </div>
+                      </td>
+                      </tr>
+                </table>  
+
+    </ion-content>
+  </ion-tab>
+
+</ion-tabs>
+</ion-content>
+</ion-view>

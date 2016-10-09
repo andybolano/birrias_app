@@ -1,0 +1,115 @@
+<ion-view  title="Nominas">
+<ion-content overflow-scroll="true" style="zoom:80%">
+<ion-tabs class="tabs-positive tabs-icon-top">
+<ion-tab title="Mi Nomina" icon-on="icon ion-ios-people" icon-off="icon ion-ios-people">
+<ion-content class="center bg">
+     <h2><span style='font-size: 16px;color:#FFF;'>MI</span><br>NOMINA</h2>
+              <div class="separador" style="width:15%;margin-left: 42.5%;"></div>
+              <br><br>
+               <div  ng-if="miNomina.length > 0" style="width:90%;margin-left:5%">
+                    <div class="ranking-num circle" id="ranking" style="z-index:1000;box-shadow: -1px 8px 16px -1px rgba(0,0,0,0.58);">1</div>
+                    <div class="crosscover">
+                        <div class="crosscover-overlay">
+
+                            <div class="crosscover-island">
+
+                                <h2 class="crosscover-title" style="color:#FFF;">{{miNomina.nomina.nombre}}</h2>
+                            </div>
+                        </div>
+                        <ul class="crosscover-list">
+                            <li>
+                                <img src="http:\\localhost:3000/images/usuarios/nomina-profile.png" alt="" style=" max-width: 100%;" ng-if="miNomina.nomina.escudo == 'false'"/>
+                                <img src="http:\\localhost:3000/image/nominas/{{miNomina.nomina._id}}.jpg" alt="" style=" max-width: 100%;" ng-if="miNomina.nomina.escudo == 'true'"/>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="box-transparent" style="margin: 0;padding:5px;padding-top: 10px;width: 100%">
+                        <table width="100%" border="0">
+                            <tr>
+                                <td><div style="background-color:#64dd17;border-radius: 50%;width:25px;height: 25px;padding-top:2px;"><p style="font-size:18px;">C</p></div></td>
+                                <td style="text-align: right;font-size:14px;" colspan="2">{{miNomina.capitan.capitan.nombres}} {{miNomina.capitan.capitan.apellidos}}</td>
+                            </tr> 
+                            <tr>
+                                <td colspan="3">
+                                    <div style="margin-top:10px;border-top:1px solid #FFF;padding-top:10px;color:#FCDD68 ">PARTIDOS</div>
+                                </td>  
+                            </tr>
+                            <tr>
+                                <td style="text-align:center" width="33%" class="num-big">
+                                {{miNomina.nomina.historial.ganados}}
+                                <!--<span ng-if="miNomina.nomina.historial.ganados == 0">0</span>
+                                <span count-up id="opens" ng-model="miNomina.nomina.historial.ganados" data-num-decimals="0" data-animation-length="5" class="num-big" ng-if="miNomina.nomina.historial.ganados > 0"></span>
+                                --></td>
+                                <td style="text-align:center" width="33%" class="num-big">
+                                {{miNomina.nomina.historial.empatados}}
+                                <!--<span ng-if="miNomina.nomina.historial.empatados == 0">0</span>
+                                <span count-up id="opens" ng-model="miNomina.nomina.historial.empatados" data-num-decimals="0" data-animation-length="5" class="num-big" ng-if="miNomina.nomina.historial.empatados > 0"></span>-->
+                                </td>
+                                <td style="text-align:center" width="33%" class="num-big" >
+                                {{miNomina.nomina.historial.perdidos}}
+                                <!--<span ng-if="miNomina.nomina.historial.perdidos == 0">0</span>
+                                     <span count-up id="opens" ng-model="miNomina.nomina.historial.perdidos" data-num-decimals="0" data-animation-length="5" class="num-big" ng-if="miNomina.nomina.historial.perdidos > 0"></span>-->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center" width="33%">GANADOS</td>
+                                <td style="text-align:center" width="33%">EMPATADOS</td>
+                                <td style="text-align:center" width="33%">PERDIDOS</td>
+                            </tr>
+                            <tr style="border:0px solid #FFF">
+                                <td colspan="3">
+                           
+                                <div class="num-big enorme" style="margin-top:10px;border-top:1px solid #FFF;padding-top:20px;">{{miNomina.nomina.puntos}} </div>
+                                   <!-- <div class="num-big enorme" count-up id="opens" ng-model="miNomina.nomina.historial.puntos" data-num-decimals="0" data-animation-length="5" style="margin-top:10px;border-top:1px solid #FFF;padding-top:10px;" ng-if="miNomina.nomina.historial.puntos > 0"></div>-->
+                                    <br><div style="color:#FCDD68 ">PUNTOS</div>
+                                </td>
+
+                            </tr> 
+                        </table>
+                    </div>
+
+                      
+
+                </div>
+
+                <div  ng-if="miNomina.length > 0" style="width:100%;" >
+                     <table class='tabla' border='0' style='border:0px;' width='100%'>
+                        <tr ng-repeat="item in IntegrantesMiNomina">
+                            <td width="32"><div class="ranking-num-list circle">{{$index + 1}}</div></td>
+                             <td width="52px;" height="52px;">
+                            <img src="http:\\localhost:3000/images/usuarios/default.png" alt="" class="circle" style="width:42px;height:42px;" ng-if="item.photo == 'false'">
+                                    <img src="http:\\localhost:3000/image/usuarios/{{item._id}}.jpg" alt="" class="circle" style="width:42px;height:42px;margin-top:5px;" ng-if="item.photo == 'true'">
+                            </td>
+                            <td align="left"><span style="margin-left: 10px;" style="font-size:8px;">{{item.nombres}} {{item.apellidos}}</span></td>
+                            <td>{{item.telefono}} </td>
+                          
+                            <td align="right"><button ng-click="eliminar(item)" class="btn-reset btn-secundario" style="color: black">E</button></td>
+                        </tr>
+                    </table>
+                    <br>
+                    <button ng-if="IntegrantesMiNomina.length > 0" class="btn-reset btn-secundario" ng-click="cargarAmigos();">Agregar</button>
+
+                </div>
+
+
+<br>
+ </ion-content>
+</ion-tab>
+
+ <ion-tab title="Nominas A las que pertenezco" icon-on="icon ion-android-contact" icon-off="icon ion-android-contact">
+
+<ion-content class="center bg">
+   <h2><span style='font-size: 16px;color:#FFF;'>NOMINAS A LAS QUE</span><br>PERTENEZCO</h2>
+              <div class="separador" style="width:15%;margin-left: 42.5%;"></div>
+    
+ </ion-content>
+
+</ion-tab>
+
+
+</ion-tabs> 
+
+</ion-content>
+
+</ion-view>
+

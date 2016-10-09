@@ -1,0 +1,27 @@
+<ion-side-menu side="left"  width="220">
+    <ion-header-bar class="bar-positive">
+        <h1 class="title">Menu</h1>
+    </ion-header-bar>
+    <ion-content class="custom content-menu">
+        <ion-list class="center menu-list">
+        <div class="menu-white">
+                <ion-item  menu-toggle="left" ui-sref="app.usuario" id="perfil">
+                Perfil<div class="active-flecha"></div>
+                </ion-item>
+                <ion-item  menu-toggle="left" ui-sref="app.reservas" >Reservas</ion-item>  
+                <ion-item  menu-toggle="left" ui-sref="app.nomina">Nominas</ion-item>
+                <ion-item  menu-toggle="left" ui-sref="app.retos">Retos</ion-item>
+                <ion-item  menu-toggle="left" ui-sref="app.ranking">Ranking</ion-item>
+                <ion-item  menu-toggle="left" ui-sref="app.torneos">Torneos</ion-item>
+                <ion-item  menu-toggle="left" ui-sref="app.sitios">Sitios</ion-item>
+            </div>
+            <div class="menu-green">
+             
+                <ion-item  menu-toggle="left" ui-sref="app.mecanima">Mecanica</ion-item>
+                <ion-item  menu-toggle="left" ui-sref="app.premios">Premios</ion-item>
+                 <ion-item  menu-toggle="left" ui-sref="app.ganadores">Ganadores</ion-item>
+                <ion-item  menu-toggle="left"  ng-click="vm.logout()"><h2>Cerrar Sesion</h2></ion-item>   
+             </div>
+        </ion-list>
+    </ion-content>
+</ion-side-menu>

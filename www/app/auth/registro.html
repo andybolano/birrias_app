@@ -1,0 +1,79 @@
+<ion-view title="Registro">
+    <ion-nav-bar class="bar-positive" style="border:0">
+        <ion-nav-back-button>
+        <img  ng-src="../img/logo.png" style="width:30px; margin: 0">
+        </ion-nav-back-button>
+       
+            
+          
+    </ion-nav-bar>
+
+    <ion-content overflow-scroll="true" class="has-header center degrade-birrias">
+        <form name="formCliente">
+            <div class="list list-inset" style="background-color: transparent;width: 80%;margin-left:10%">
+              <label class="item item-input input-bottom box-text">
+                    <i class="icon ion-email "></i>
+                    &nbsp;
+                    <span class="input-label">CORREO:</span>
+                    <input type="email" name="correo" style="color:#FFF" style="color:#FFF" ng-model="vm.usuario.email" ng-required="true">
+                </label>
+                <label class="item item-input input-bottom box-text">
+                    <i class="icon ion-person "></i>
+                    &nbsp;
+                    <span class="input-label">NOMBRES:</span>
+                    <input type="text" name="nombre" style="color:#FFF" ng-model="vm.usuario.nombres" ng-required="true">
+                </label>
+                <label class="item item-input input-bottom box-text">
+                    <i class="icon ion-person "></i>
+                    &nbsp;
+                    <span class="input-label">APELLIDOS:</span>
+                    <input type="text" name="apellidos" style="color:#FFF" ng-model="vm.usuario.apellidos" ng-required="true">
+                </label>
+                <label class="item item-input input-bottom box-text">
+                    <i class="icon ion-android-pin"></i>
+                    &nbsp;
+                    <span class="input-label">SEXO:</span>
+                    
+                    <select class=" box-text" style="background-color: transparent;" ng-model="vm.usuario.sexo">
+                                <option value="M">M</option>
+                                <option value="F">F</option>
+                    </select>
+                </label>
+                
+               
+                <label class="item item-input input-bottom box-text">
+                    <i class="icon ion-android-phone-portrait "></i>
+                    &nbsp;
+                    <span class="input-label">CEULULAR:</span>
+                    <input type="number" name="telefono" style="color:#FFF"  ng-model="vm.usuario.cedular" ng-required="true">
+                </label>
+                
+                <label class="item item-input input-bottom box-text">
+                    <i class="icon ion-key "></i>
+                    &nbsp;
+                    <span class="input-label">CONTRASEÑA:</span>
+                    <input type="password" name="contrasena" style="color:#FFF" ng-model="vm.usuario.pass" ng-required="true">
+                </label>
+                <label class="item item-input input-bottom box-text">
+                    <i class="icon ion-key"></i>
+                    &nbsp;
+                    <span class="input-label">REPETIR CONTRASEÑA:</span>
+                    <input type="password" name="confirmarContrasena" style="color:#FFF" ng-model="vm.usuario.passConfir"
+                           ng-required="true">
+                </label>
+
+                <div class="spacer" style="height:5px;"></div>
+                <button class="button button-block btn bg-btn-red "
+                        ng-click="vm.registrarUsuario()">
+                    Registrarme
+                </button>
+                <div class="spacer" style="height:5px;"></div>
+                <button class="button button-block btn bg-btn-blue "
+                        ng-click="vm.registrarUsuariofacebook()">
+                    Registrarme con Facebook
+                </button>
+                <span class="text-center positive" ng-show="vm.mostrarAdvertencia">Las contraseñas no coinciden</span>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,132 @@
+<ion-view  title="Reservas">
+<ion-content overflow-scroll="true" style="zoom:80%">
+<ion-tabs class="tabs-positive tabs-icon-top">
+<ion-tab title="Nueva reserva" icon-on="icon ion-ios-people" icon-off="icon ion-ios-people">
+<ion-content class="center bg">
+
+ <h2><span style='font-size: 16px;color:#FFF;'>REALIZAR</span><br>RESERVA</h2>
+        <div class="separador" style="width:16%; margin-left: 42%;"></div>
+
+        <ul class="pasosPedido">
+            <a href="javascript:void(0)" ng-click="getSitios();"><li class="arrow_box op1 {{tabSitios}}">SITIOS</li></a>
+            <a href="javascript:void(0)" ng-click="getCanchasBySitio(0)"><li id="tab-canchas" class="arrow_box op2 {{tabCanchas}}">CANCHAS</li></a>
+            <a href="javascript:void(0)"><li id="tab-reservas" class="arrow_box op3 {{tabReservas}}">RESERVAR</li></a>
+        </ul>
+
+        <div id="view-min">
+            <table width="100%">
+                <tr>
+                    <td width="50%">
+
+                  <div class="list" ng-show="sitioView == true"  style="padding-top:10px;">
+                  <input type='hidden' value='" + pocision + "' id='pocisionSitio_txt'>
+				    <a class="item item-thumbnail-left card">
+				      <img src='http:\\localhost:3000/image/sitios/{{Sitio._id}}.jpg'>
+				      <h2>{{Sitio.nombre}}</h2>
+				      <p>{{Sitio.telefono}}</p>
+				      <p>{{Sitio.direccion}}</p>
+				      <p>{{Sitio.email}}</p>
+				    </a>
+				</div>
+
+                    </td>
+                    <td>
+
+                     <div class="list" ng-show="canchaView == true"  style="padding-top:10px;">
+				    <a class="item item-thumbnail-left card">
+				      <img src='http:\\localhost:3000/image/canchas/{{Cancha._id}}.jpg'>
+				      <h2>{{Cancha.nombre}}</h2>
+				      <hp>Techo: {{Cancha.techo}}</p>
+				      <p>jugadores x equipo: {{Cancha.jugadores}}</p>
+				      <p>Medidas: {{Cancha.medidas.longitud}} x {{Cancha.medidas.ancho}}</p>
+				    </a>
+				</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+      
+
+        		<div class="list" ng-show="listaSitios == true" style="padding-top:10px;">
+				    <a class="item item-thumbnail-left card"   ng-repeat="item in sitios" ng-click="getCanchasBySitio(item)">
+				      <img src='http:\\localhost:3000/image/sitios/{{item._id}}.jpg'>
+				      <h2>{{item.nombre}}</h2>
+				      <p>{{item.telefono}}</p>
+				      <p>{{item.direccion}}</p>
+				      <p>{{item.email}}</p>
+				    </a>
+				</div>
+
+           
+    
+				<div class="list" ng-show="listaCanchas == true" style="padding-top:10px;">
+				    <a class="item item-thumbnail-left card"   ng-repeat="item in canchas"  ng-click='cargarMeses(item);'>
+				      <img src='http:\\localhost:3000/image/canchas/{{item._id}}.jpg'>
+				      <h2>{{item.nombre}}</h2>
+				      <p>Techo: {{item.techo}}</p>
+				      <p>Jugadores sugeridos por equipo:{{item.jugadores}}</p>
+				      <p>  Medidas:{{item.medidas.longitud}} x {{item.medidas.ancho}} </p>
+				    </a>
+				</div>
+
+
+
+        
+        <div style="height: 95%; overflow-y: auto" id="calendario" >
+
+
+
+            <div  class="c6" >
+               
+                <br>
+
+                <select  onchange="angular.element(this).scope().cargarDias(this.value)"  class="btn-reset meses">
+                    <option ng-repeat="item in Meses" value="{{item.id}}">{{item.nombre}}</option>
+                </select>
+                <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="card" style="margin-top:0px;">
+                    <tr>
+                        <td><h4>D</h4></td>
+                        <td><h4>L</h4></td>
+                        <td><h4>M</h4></td>
+                        <td><h4>M</h4></td>
+                        <td><h4>J</h4></td>
+                        <td><h4>V</h4></td>
+                        <td><h4>S</h4></td>
+
+                    </tr>	
+                    <tbody ng-bind-html="showDia()">
+                    	
+                    </tbody>
+                </table>
+            </div>
+            <div  class="c6" style="display: none; padding-left:20px;padding-right: 20px; " id="horas">
+                <h3>AGENDA</h3>
+                <div style="height:320px; margin-top:10px; overflow-x:auto ;">
+                    <table width="70%"  align="center" border="0" class="horas" cellpadding="0" cellspacing="0">
+                        <tbody id="listaHoras">
+
+                        </tbody>
+                    </table>
+                </div>	                    
+            </div>
+
+
+        </div>
+
+</ion-content>
+</ion-tab>
+
+<ion-tab title="Mis Reservas" icon-on="icon ion-ios-people" icon-off="icon ion-ios-people">
+<ion-content class="center bg">
+</ion-content>
+</ion-tab>
+
+<ion-tab title="Historial" icon-on="icon ion-ios-people" icon-off="icon ion-ios-people">
+<ion-content class="center bg">
+</ion-content>
+</ion-tab>
+
+</ion-tabs>
+</ion-content>
+</ion-view>
