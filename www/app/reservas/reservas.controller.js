@@ -6,7 +6,7 @@
         .controller('reservasCtrl',  reservasCtrl);
 
     /* @ngInject */
-    function reservasCtrl($scope,$http, API_URL,$state,$ionicModal) {
+    function reservasCtrl($scope,$http, API_URL,$state,$ionicModal,$sce) {
 
     	 $scope.$on('$ionicView.loaded',function(){
           //declarar escopes y funciones iniciales
@@ -94,7 +94,6 @@
         }
 
         $scope.getCanchasBySitio = function (sitio) {
-console.log(sitio)
 
             if (sitio == 0 && $scope.sapo == false) {
 
@@ -129,7 +128,7 @@ console.log(sitio)
             $scope.Cancha = cancha;
             $scope.Meses = calendario.calendario();
 
-
+            
             $scope.listaCanchas = false;
              $scope.canchaView = true;
              $scope.calendario = true;
@@ -146,7 +145,9 @@ console.log(sitio)
         $scope.cargarDias = function (mes) {
 
             var f = new Date();
-            var diaActual = (f.getDate());
+            
+
+         var diaActual = (f.getDate());
             var anioActual = (f.getFullYear());
             var mesActual = (f.getMonth() + 1);
             var estado_boton = "enabled";
@@ -160,9 +161,10 @@ console.log(sitio)
             var datos_meses = new Array();
             var datos_meses = calendario.calendario();
 
+             var d = new Date();
 
-
-         
+    
+         	var id1 = d.getMonth() + 1 + "" + d.getDate();
 
             var dia_dela_semana = dia_semana(1 + "/" + mes + "/" + anioActual);
 
@@ -200,8 +202,12 @@ console.log(sitio)
                                 }
                             }
 
+                            var id2 =  mes + "" + y;
+                            if(id1 == id2){
+								clase += " hoy";
+                            }
 
-                            dia += "<td width='14%' height='46px'><button class='btn-reset " + clase + "' id=" + mes + "" + y + " " + estado_boton + " onclick='angular.element(this).scope().getAgendaDiaByCancha(" + mes + "," + y + ")'>" + y + "</button></td> ";
+                            dia += "<td width='14%' height='46px'><button class='btn-reset " +   clase + "' id=" + mes + "" + y + "  " + estado_boton + " onclick='angular.element(this).scope().getAgendaDiaByCancha(" + mes + "," + y + ")'>" + y + "</button></td> ";
                             cont = cont + 1;
 
 
@@ -211,26 +217,30 @@ console.log(sitio)
                             cont = 0;
                             y = y - 1;
                         }
-                        return dia;
+                      
 
 
-                        dia = "";
+                        
+                       
+                        
                     }
+                    
+                    $scope.calendar =  $sce.trustAsHtml(dia);
+                
+                  
+                   //$scope.getAgendaDiaByCancha(mes, d.getDate())
 
-                    var d = new Date();
-                    document.getElementById(d.getMonth() + 1 + "" + d.getDate()).classList.add('hoy');
-                    $scope.getAgendaDiaByCancha(mes, d.getDate())
-
-                }
+               }
             }
         }
+
 
         $scope.getAgendaDiaByCancha = function (mes, dia) {
             var horaReservas = "";
             document.getElementById("listaHoras").innerHTML = "";
             document.getElementById("horas").style.display = "block";
 
-            for (h = 0; h <= 23; h++)
+            for (var h = 0; h <= 23; h++)
             {
 
                 horaReservas = "<tr><td width='10px'   valign='top'>" + h + ":00</td><td><button id='" + h + ":00' class='hora btn-reset' onclick='angular.element(this).scope().reservar_cancha(" + h + "," + dia + "," + mes + ")'>RESERVAR</button></td></tr>"

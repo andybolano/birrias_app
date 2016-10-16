@@ -416,6 +416,7 @@ box-shadow: 0px -6px 5px -4px rgba(0,0,0,0.56);
   .dia{
     font-family: 'fg-book';
     height: 30px; 
+    color:#FFF;
   }
   .dia-disabled{
     font-family: 'fg-book';
