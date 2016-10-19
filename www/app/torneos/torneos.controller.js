@@ -65,6 +65,24 @@
          
          return dia+"/"+mes+"/"+anio;
       }
+
+      $scope.inscribirTorneo = function(torneo){
+        var object = {
+          torneo:torneo,
+          nomina:$scope.miNomina
+        }
+        $http.post(API_URL+'campeonatos/inscribir',object).success(function (data) {
+
+          var alertPopup = $ionicPopup.alert({
+                 title: 'Buen trabajo!',
+                 template: data
+               });
+                setTimeout(function(){
+                         location.reload(true);
+                     },2000);
+                
+        });
+      }
       
 
 

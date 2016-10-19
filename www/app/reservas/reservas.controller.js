@@ -41,6 +41,16 @@
          $scope.getMisReservasActivas();
            $scope.historial();
            $scope.misEstadisticas();
+
+
+             $ionicModal.fromTemplateUrl('agenda', {
+                scope: $scope,
+                animation: 'slide-in-up'
+              }).then(function(modal) {
+                $scope.modal = modal;
+              })
+
+
         });
 
     	  
@@ -138,6 +148,7 @@
             $scope.tabSitios = "";
 			$scope.tabCanchas = "";
 		    $scope.tabReservas = "activo";
+            $scope.fecha = "";
 
             var f = new Date();
             $scope.cargarDias((f.getMonth() + 1));
@@ -240,7 +251,8 @@
         $scope.getAgendaDiaByCancha = function (mes, dia) {
 
 
-
+            $scope.modal.show();
+            
 
             var horaReservas = "";
              $scope.horas= true;
@@ -272,6 +284,8 @@
             var anio = calendario.anio_actual();
             var fecha = anio + "-" + mesString + "-" + diaString;
 
+            $scope.fecha = diaString + "-" + mesString + "-" + anio;
+
             $http.get(API_URL+'reservas/' + $scope.Cancha._id + '/' + fecha).success(function (data) {
                 var listaAgenda = data.respuesta;
 
@@ -293,6 +307,12 @@
 
 
         }
+
+$scope.closeModal = function(){
+    $scope.modal.hide;
+}
+
+
 
         $scope.reservar_cancha = function (hora, dia, mes) {
             var d = new Date();

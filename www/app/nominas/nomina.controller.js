@@ -6,7 +6,7 @@
         .controller('nominaCtrl',  nominaCtrl);
 
     /* @ngInject */
-    function nominaCtrl($scope,$http, API_URL,$state,$ionicModal) {
+    function nominaCtrl($scope,$http, API_URL,$state,$ionicModal,$ionicPopup) {
         $scope.$on('$ionicView.loaded',function(){
           //declarar escopes y funciones iniciales
             $scope.Nomina ={};
@@ -17,6 +17,17 @@
                $scope.NominasPertenezco = [];
                $scope.IntegrantesNominaPertenezco = [];
                $scope.getMiNomina();
+
+
+          
+
+          $ionicModal.fromTemplateUrl('nuevo.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+              }).then(function(modal) {
+                $scope.modal = modal;
+                 animation: 'slide-left-right'
+              });
 
         });
 
@@ -88,90 +99,111 @@
         }
 
          $scope.cargarAmigos = function(){
-                  // $scope.getAmigosNomina();
-                  /* $ionicModal.fromTemplateUrl('modalAmigos.html', {
 
-                             scope: $scope,
-                            animation: 'slide-in-up'
-                            }).then(function(modal) {
 
-                              $scope.modal = $ionicModal.fromTemplate('<div class="modal"><header class="bar bar-header bar-positive"> <h1 class="title">I\'m A Modal</h1><div class="button button-clear" ng-click="modal2.hide()"><span class="icon ion-close"></span></div></header><content has-header="true" padding="true"><p>This is a modal</p></content></div>', {
-      scope: $scope,
-      animation: 'slide-left-right'
-    });
+                 $scope.getAmigosNomina();
 
-                            });
-                            $scope.openModal = function() {
+      
+                              $scope.openModal();
+                           
+          }
+
+$scope.openModal = function() {
                               $scope.modal.show();
                             };
-                            $scope.closeModal = function() {
+
+          $scope.closeModal = function() {
                               $scope.modal.hide();
                             };
-                            // Cleanup the modal when we're done with it!
-                            $scope.$on('$destroy', function() {
-                              $scope.modal.remove();
-                            });
-                            // Execute action on hide modal
-                            $scope.$on('modal.hidden', function() {
-                              // Execute action
-                            });
-                            // Execute action on remove modal
-                            $scope.$on('modal.removed', function() {
-                              // Execute action
-                            });*/
-                
-  
-          }
 
         $scope.agregar = function(usuario){
 
-          swal({title: "Estas seguro?",    
-               text: "Esta seguro que deseas agregar a "+usuario.nombres+" a tu nomina?",    
-              type: "warning",   
-              showCancelButton: true,   
-              confirmButtonColor: "#DD6B55",   
-               confirmButtonText: "Si, agregar!",     
-              closeOnConfirm: false 
-          }, function(){  
-               var miNomina = JSON.parse(localStorage.getItem('miNomina'));
-              $http.post("/nomina/agregarIntegrante",{
+
+ var confirmPopup = $ionicPopup.confirm({
+         title: 'Agregar Nuevo integrante',
+         template: "Esta seguro que deseas agregar a "+usuario.nombres+" a tu nomina?", 
+      });
+
+      confirmPopup.then(function(res) {
+         if(res) {
+
+           var miNomina = JSON.parse(localStorage.getItem('miNomina'));
+              $http.post(API_URL+"nomina/agregarIntegrante",{
                     idNomina: miNomina.capitan._id,
                     usuarioNuevo: usuario._id
                 }).success(function (data) {
                       $scope.integrantes(miNomina.capitan._id);
-                    //$scope.buscarPorNomina();
-                  swal("Agregado!", "Ahora "+usuario.nombres+" pertenece a tu nomina", "success");
+                     var alertPopup = $ionicPopup.alert({
+                 title: 'Agregado',
+                 template:  "Ahora "+usuario.nombres+" pertenece a tu nomina"
+
+
+               });
+
+                      $scope.closeModal();
+
             });
-          
-    });
+
+          } else {
+
+
+            
+         }
+
+        
+        });
+
       }
         
     $scope.eliminar = function(usuario){
       
-      swal({title: "Estas seguro?",    
-               text: "Esta seguro que deseas eliminar a "+usuario.nombres+" a tu nomina?",    
-              type: "warning",   
-              showCancelButton: true,   
-              confirmButtonColor: "#DD6B55",   
-               confirmButtonText: "Si, eliminar!",     
-              closeOnConfirm: false 
-          }, function(){  
+      var confirmPopup = $ionicPopup.confirm({
+         title: 'Agregar Nuevo integrante',
+         template: "Esta seguro que deseas agregar a "+usuario.nombres+" a tu nomina?", 
+      });
+
+      confirmPopup.then(function(res) {
+         if(res) {
+
+
                var miNomina = JSON.parse(localStorage.getItem('miNomina'));
-              $http.post("/nomina/delete/integrante",{
+              $http.post(API_URL+"nomina/delete/integrante",{
                     idNomina: miNomina.capitan._id,
                     usuario: usuario._id,
                     nombres:usuario.nombres
                 }).success(function (data) {
                   if(data.res == 'OK'){
-                  swal("Eliminado!",data.msg, "success");
+
+                     var alertPopup = $ionicPopup.alert({
+                 title: 'Eliminado',
+                 template:  "Ahora "+data.msg
+
+
+               });
+
+               
+                  $scope.closeModal();
                  $scope.integrantes(miNomina.capitan._id);
                }else{
-                 sweetAlert("Error!",data.msg, "error");
+                 
+                  var alertPopup = $ionicPopup.alert({
+                 title: 'Error',
+                 template:  data.msg
+
+
+               });
+
+                 $scope.closeModal();
                }
             });
           
+            } else {
+
+
+            
+         }
+
     });
-    
         
     }
     

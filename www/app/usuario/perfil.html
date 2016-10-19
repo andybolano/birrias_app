@@ -23,7 +23,7 @@
           <div class="row">
               <div class="col">
                   <div class="box-transparent">
-                  <a href="#/index/retos">
+                  <a href="javascript:;" ng-click="getHistoriaRetos();">
                     ver
                    </a>
                   <table width="100%" border="0">
@@ -141,9 +141,9 @@
 
 <script  id="nuevo.html"  type="text/ng-template">
       <ion-modal-view>
-        <ion-header-bar class="bar bar-header bar-positive">
+        <ion-header-bar class="bar bar-header bar-assertive">
           <h1 class="title">BUSCADOR DE AMIGOS</h1>
-          <button class="button button-clear button-primary" ng-click="modal.hide()">Cancelar</button>
+          <button class="button button-clear button-primary" ng-click="modal.hide()"><i class="ion-close"></i></button>
         </ion-header-bar>
         <ion-content class="center bg" >
        
@@ -172,4 +172,63 @@
         </ion-content>
       </ion-modal-view>
     </script>
+
+
+   <script  id="historia_retos"  type="text/ng-template">
+      <ion-modal-view>
+        <ion-header-bar class="bar bar-header bar-assertive">
+          <h1 class="title">HISTORIA DE RETOS</h1>
+          <button class="button button-clear button-primary" ng-click="modal_2.hide()"><i class="ion-close"></i></button>
+        </ion-header-bar>
+        <ion-content class="center bg" >
+        <br>
+             <div ng-if="Historia_retos.length == 0">
+                USTED NO HA JUGADO NINGUN RETO
+              </div>
+    
+       <table width="100%" align="center" style="margin-top:20px;"  ng-repeat="item in Historia_retos" class="border-piso-puntos" style="text-align: center;">
+            <tr>
+               <td>
+                  <span style=" color:#FCDD68;font-family: 'fg-book';">Fecha : </span>{{item.reserva.fecha.dia}}/{{item.reserva.fecha.mes}}/{{item.reserva.fecha.anio}} - {{item.reserva.hora.desde}}
+               </td>
+                <td> <span style=" color:#FCDD68;font-family: 'fg-book';">Sitio : </span>{{item.reserva.sitio.nombre}}</td>
+                <td> <span style=" color:#FCDD68;font-family: 'fg-book';">Cancha : </span>{{item.reserva.cancha.nombre}}</td>
+                <td  width="10%" style="text-align: center;">
+                  <img src="http:\\localhost:3000/image/usuarios/nomina-profile.png" alt="" style="width:70px;border-radius:10px;border:5px solid #2C3B3C" ng-if="item.retator.escudo == 'false'"/>
+                 <img src="http:\\localhost:3000/image/nominas/{{item.retador._id}}.jpg" alt="" style=" width: 70px;border-radius:10px;border:5px solid #2C3B3C" ng-if="item.retador.escudo == 'true'"/>
+                 <br>{{item.retador.nombre}}
+                </td>
+                <td width="3%" style="text-align: center;">
+                  <div class="num-big" style="color:#FFF">{{item.golesretador}}</div>
+                </td>
+                 <td width="5%"  style="text-align: center;">
+                  <h1 style="font-size:26px;">VS</h1>
+                   
+                </td>
+                <td width="3%" style="text-align: center;">
+                  <div class="num-big" style="color:#FFF">{{item.golesretado}}</div>
+                </td>
+                <td  width="10%" style="text-align: center;">
+                 
+                  <img src="../../image/usuarios/nomina-profile.png" alt="" style="width:70px;border-radius:10px;border:5px solid #2C3B3C" ng-if="item.retato.escudo == 'false'"/>
+                 <img src="../../image/nominas/{{item.retado._id}}.jpg" alt="" style=" width: 70px;border-radius:10px;border:5px solid #2C3B3C" ng-if="item.retado.escudo == 'true'"/>
+                 <br>{{item.retado.nombre}}
+                </td>
+                <td>
+                   {{item.pago}}
+                </td>
+                <td style="text-align: center;" width="10%"><div class="num-big">{{item.puntos}}</div>Puntos Jugados</td>
+                <td style="text-align: center;" width="10%"><div style="color:#FCDD68;font-weight: 900">{{item.estado}}</div></td>
+            </tr>
+
+
+              
+        </table>
+
+
+        </ion-content>
+      </ion-modal-view>
+    </script>
+    
+
 </ion-view>

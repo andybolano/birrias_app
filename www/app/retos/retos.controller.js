@@ -40,7 +40,13 @@
          $http.get(API_URL+"retos/pendientes/"+$scope.miNomina).success(function (res) {
     
                     if(res.status == 500){
-                        sweetAlert("Oops...", res.msg.message, "error");
+
+                      var alertPopup = $ionicPopup.alert({
+                 title: 'Oops...',
+                 template: res.msg.message
+               });
+
+                       
                     }else{
                        $scope.RetosPendientes = res.data;
                     }
@@ -82,6 +88,12 @@
         }
 
         $scope.buscarDisponibilidad = function () {
+          var alertPopup = $ionicPopup.alert({
+                 title: 'Revisa la disponibilidad de canchas!',
+                 template: 'En el tab derecho inferior'
+               });
+
+
             if ($scope.Reto.fecha == undefined || $scope.Reto.hora == undefined) {
 
               var alertPopup = $ionicPopup.alert({
@@ -105,7 +117,7 @@
                  title: 'Cancha seleccionada!',
                  template: 'Continua con el proceso de tu reto'
                });
-
+           
         }
 
         $scope.guardarReto = function () {

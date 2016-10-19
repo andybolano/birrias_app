@@ -11,11 +11,14 @@
             'retos',
             'ranking',
             'torneos',
+    
         ]);
 
 app.config(function($ionicConfigProvider) {
     $ionicConfigProvider.tabs.position('bottom');
 })
+
+
 
 
 })();

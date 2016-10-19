@@ -83,7 +83,7 @@
                             <td align="left"><span style="margin-left: 10px;" style="font-size:8px;">{{item.nombres}} {{item.apellidos}}</span></td>
                             <td>{{item.telefono}} </td>
                           
-                            <td align="right"><button ng-click="eliminar(item)" class="btn-reset btn-secundario" style="color: black">E</button></td>
+                            <td align="right"><button ng-click="eliminar(item)" class="btn-reset btn-secundario" style="color: black"><i class="ion-ios-trash"></i></button></td>
                         </tr>
                     </table>
                     <br>
@@ -129,6 +129,45 @@
 </ion-tabs> 
 
 </ion-content>
+
+<script id="nuevo.html" type="text/ng-template">
+      <ion-modal-view>
+        <ion-header-bar class="bar bar-header bar-assertive">
+          <h1 class="title">AGREGAR INTEGRANTES</h1>
+          <button class="button button-clear button-primary" ng-click="modal.hide()"><i class="ion-close"></i></button>
+        </ion-header-bar>
+
+    <ion-content class="center bg">
+               
+                     
+                            <h2 class="modal-title" style="margin-left: 20px;margin-top: 10px;">MIS AMIGOS</h2>
+        
+                            <div style="width:80%;margin-left: 10%">
+                             <input type="text" class="box-text" ng-model="filtro" style="margin-top:10px;" placeholder="Ingresa Nombre">
+                            </div>
+                   
+            
+             
+                    <table width="80%" align="center" class="tabla" >
+                        <tbody>
+                            <tr ng-repeat="item in Amigos| filter:filtro" ng-if="item.username != 'none@none.co'">
+                                <td width="32"><div class="ranking-num-list circle">{{$index + 1}}</div></td>
+                                  <td width="52px;" height="52px;" >
+                            <img src="http:\\localhost:3000/images/usuarios/default.png" alt="" class="circle" style="width:42px;height:42px;" ng-if="item.photo == 'false'">
+                            <img src="http:\\localhost:3000/image/usuarios/{{item._id}}.jpg" alt="" class="circle" style="width:42px;height:42px;" ng-if="item.photo == 'true'">
+                        </td>
+                                <td align="left"><span style="margin-left: 10px;">{{item.nombres}} {{item.apellidos}}</span></td>
+                                <td align="left"><div class="num-list">{{item.puntaje}}</div></td>
+                                <td align="right"><button class="btn-reset btn-secundario" ng-click='agregar(item)' style='color: black'><i class="ion-person-add"></i></button></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+               <br><br>
+
+  </ion-content>
+      </ion-modal-view>
+    </script>
 
 </ion-view>
 
