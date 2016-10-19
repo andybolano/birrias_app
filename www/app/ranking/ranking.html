@@ -1,0 +1,54 @@
+<ion-view  title="Retos">
+<ion-content overflow-scroll="true">
+<ion-tabs class="tabs-positive tabs-icon-top">
+<ion-tab title="Retos" icon-on="icon ion-person" icon-off="icon icon ion-person">
+  <ion-content class="center bg">
+
+
+       <h2><span style='font-size: 16px;color:#FFF;'>RANKING</span><br>JUGADORES</h2>
+      	<div class="separador"></div>
+<br>
+
+<table width="100%" align="center" class="tabla">
+                <tbody>
+                    <tr ng-repeat="item in Usuarios" ng-if="item.username != 'none@none.co'">
+                        <td width="28px" style="padding: 4px;"><div class="ranking-num-list circle">{{$index+1}}</div></td>
+                        <td width="52px;" height="52px;" >
+                            <img src="http:\\localhost:3000/images/usuarios/default.png" alt="" class="circle" style="width:42px;height:42px;" ng-if="item.photo == 'false'">
+                            <img src="http:\\localhost:3000/image/usuarios/{{item._id}}.jpg" alt="" class="circle" style="width:42px;height:42px;" ng-if="item.photo == 'true'">
+                        </td>
+                        <td align="left"><span style="margin-left: 10px;font-family: 'fg-mediun-cond'">{{item.nombres}} {{item.apellidos}}</span></td>
+                        <td align="left"><div class="num-list">{{item.puntaje}}</div></td>
+                    </tr>
+                </tbody>
+            </table>
+
+  </ion-content>
+</ion-tab>
+<ion-tab title="Retos Pendientes" icon-on="icon ion-ios-people" icon-off="icon ion-ios-people">
+  <ion-content class="center bg">
+    <h2><span style='font-size: 16px;color:#FFF;'>RANKING</span><br>NOMINAS</h2>
+      <div class="separador" style="width:30%;"></div>
+      <br>
+      <table width="100%" align="center" class="tabla">
+                <tbody>
+                    <tr ng-repeat="item in Nominas">
+                        <td width="28px" style="padding: 4px;"><div class="ranking-num-list circle">{{$index+1}}</div></td>
+                        <td width="52px;" height="52px;" >
+                              <img src="http:\\localhost:3000/images/usuarios/nomina-profile.png" alt="" style=" max-width: 100%;" ng-if="item.escudo == 'false'"/>
+                              <img src="http:\\localhost:3000/image/nominas/{{item._id}}.jpg" alt="" style=" max-width: 100%;" ng-if="item.escudo == 'true'"/>
+                        </td>
+                        <td align="left"><span style="margin-left: 10px;font-family: 'fg-mediun-cond'">{{item.nombre}}</span></td>
+                        <td align="left"><div class="num-list">{{item.puntos}}</div></td>
+                    </tr>
+                </tbody>
+            </table>
+
+  </ion-content>
+</ion-tab>
+</ion-tabs>
+</ion-content>
+
+
+
+</ion-view>

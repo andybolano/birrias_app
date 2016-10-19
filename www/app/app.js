@@ -3,11 +3,14 @@
   var app =  angular.module("app", [
             'ionic',
             'ngSanitize',
-            'ngCountup',
+           
             'auth',
             'usuario',
             'nomina',
             'reservas',
+            'retos',
+            'ranking',
+            'torneos',
         ]);
 
 app.config(function($ionicConfigProvider) {

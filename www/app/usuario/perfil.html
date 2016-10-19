@@ -46,7 +46,7 @@
                       <br>
                        PUNTOS
               </div>
-              <button class="btn bg-btn-red" id="">BUSCAR AMIGOS</button>
+              <button class="btn bg-btn-red" id="" ng-click="buscarAmigos()">BUSCAR AMIGOS</button>
               </div>
           </div>
       </div>
@@ -138,4 +138,38 @@
 
 </ion-tabs>
 </ion-content>
+
+<script  id="nuevo.html"  type="text/ng-template">
+      <ion-modal-view>
+        <ion-header-bar class="bar bar-header bar-positive">
+          <h1 class="title">BUSCADOR DE AMIGOS</h1>
+          <button class="button button-clear button-primary" ng-click="modal.hide()">Cancelar</button>
+        </ion-header-bar>
+        <ion-content class="center bg" >
+       
+                    <h2 class="modal-title" style="margin-top: 10px;"><span style='font-size: 16px;color:#FFF;'>BUSCAR</span><br>AMIGOS</h2>
+                    <div class="separador" style="width:10%;height: 1px"></div>
+                
+
+           <input type="text" class="box-text" ng-model="filtro" style="margin-top:10px;width:90%;margin-left:5%;color:#FFF" placeholder="Ingresa Nombre">
+               
+           <table width="90%" align="center" class="tabla" >
+                                <tbody>
+                                    <tr ng-repeat="item in Usuarios | filter: filtro" ng-if="item.username != 'none@none.co'">
+
+                                        <td width="28px"><div class="ranking-num-list circle">{{$index+1}}</div></td>
+                                         <td width="52px;" height="52px;" >
+                            <img src="http:\\localhost:3000/images/usuarios/default.png" alt="" class="circle" style="width:42px;height:42px;" ng-if="item.photo == 'false'">
+                            <img src="http:\\localhost:3000/image/usuarios/{{item._id}}.jpg" alt="" class="circle" style="width:42px;height:42px;" ng-if="item.photo == 'true'">
+                        </td>
+                                        <td align="left"><span style="margin-left: 10px;">{{item.nombres}} {{item.apellidos}}</span></td>
+                                        <td align="left"><div class="num-list">{{item.puntaje}}</div></td>
+                                        <td style="text-align: right"><button class="btn-reset btn-secundario" ng-click='seguirUsuario(item._id)' style='color: black'>Seguir</button></td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+        </ion-content>
+      </ion-modal-view>
+    </script>
 </ion-view>

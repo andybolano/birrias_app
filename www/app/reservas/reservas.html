@@ -1,5 +1,5 @@
 <ion-view  title="Reservas">
-<ion-content overflow-scroll="true" style="zoom:80%">
+<ion-content overflow-scroll="true" style="zoom:90%">
 <ion-tabs class="tabs-positive tabs-icon-top">
 <ion-tab title="Nueva reserva" icon-on="icon ion-ios-people" icon-off="icon ion-ios-people">
 <ion-content class="center bg">
@@ -73,13 +73,7 @@
 
 
         
-        <div style="height: 95%; overflow-y: auto" id="calendario" >
-
-
-
-            <div  class="c6" >
-               
-                <br>
+        <div style="overflow-y: auto"   ng-show="calendario == true">
 
                 <select  onchange="angular.element(this).scope().cargarDias(this.value)"  class="btn-reset meses">
                     <option ng-repeat="item in Meses" value="{{item.id}}">{{item.nombre}}</option>
@@ -98,16 +92,14 @@
                     <tbody ng-bind-html="calendar">
                     	
 
-
-                       
                     </tbody>
                 </table>
-            </div>
-            <div  class="c6" style="display: none; padding-left:20px;padding-right: 20px; " id="horas">
+                </div>
+            <div   ng-show="horas == true">
                 <h3>AGENDA</h3>
-                <div style="height:320px; margin-top:10px; overflow-x:auto ;">
-                    <table width="70%"  align="center" border="0" class="horas" cellpadding="0" cellspacing="0">
-                        <tbody id="listaHoras">
+                <div style="height:400px; margin-top:10px; overflow-x:auto ;">
+                    <table width="90%"  style='margin-left:5%' align="center" border="0" class="horas" cellpadding="0" cellspacing="0">
+                        <tbody ng-bind-html="agenda">
 
                         </tbody>
                     </table>
@@ -122,11 +114,145 @@
 
 <ion-tab title="Mis Reservas" icon-on="icon ion-ios-people" icon-off="icon ion-ios-people">
 <ion-content class="center bg">
+<br><br>
+<div ng-if="ReservasPendientes.length == 0">
+              <center><h1>No tienes reservas pendientes</h1></center>
+            </div>
+            <div ng-if="ReservasPendientes.length > 0">
+                <div ng-repeat="item in ReservasPendientes" class='contenedor-reserva'>
+                    <span>Sitio : </span>{{item.sitio.nombre}}<br>
+                    <span>Cancha : </span>{{item.cancha.nombre}}<br>
+                    <span>Fecha : </span>{{item.fecha.anio}}/{{item.fecha.mes}}/{{item.fecha.dia}}<br>
+                    <span>Hora : </span>{{item.hora.desde}}<br>
+                    <span>Estado : </span><a href='javascript:;' ng-click='informacionEstado(item.estado)'>
+                        <estado ng-if="item.estado == 'esperandoRevision'">Esperando Revision</estado> 
+                        <estado ng-if="item.estado == 'esperandoConfirmacion'">Esperando Confirmacion</estado>
+                        <estado ng-if="item.estado == 'confirmadaSinAbono'">Confirmada sin Abono</estado> 
+                        <estado ng-if="item.estado == 'confirmadaConAbono'">Confirmada Con Abono</estado>
+                    </a>
+                    <div style='margin-top:10px;' ng-if="item.estado == 'esperandoConfirmacion'">
+                        <span>PRECIO : </span>{{item.valor | currency}}<br>
+                        <span>ABONO REQUERIDO : </span>{{item.abono.requerido | currency}}<br>
+                        <button  class='btn-reset btn-terciario' ng-click='actualizar_estado(item._id, 4)'>Confirmar </button>
+                        <button class='btn-reset btn-danger' style='margin-left:5px;' ng-click='actualizar_estado(item._id, 5)'>Cancelar Reserva</button>
+                    </div>
+
+                    <div style="margin-top:10px" ng-if="item.estado == 'confirmadaSinAbono'">
+                        <table>
+                            <tr>
+                                <td><span>PRECIO : </span></td><td>{{item.valor | currency}}</td>
+                            </tr>
+                            <tr>
+                                <td><span>ABONO REQUERIDO :</span></td><td>{{item.abono.requerido | currency}}</td>
+                            </tr>  
+                            <tr>
+                                <td><span>ABONO LIQUIDADO : </span></td><td>{{item.abono.liquidado | currency}}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div style='margin-top:10px;' ng-if="item.estado == 'confirmadaConAbono'">
+                        <table>
+                            <tr>
+                                <td><span>PRECIO : </span></td><td>{{item.valor | currency}}</td>
+                                </tr>
+                            <tr>
+                                <td><span>ABONO REQUERIDO :</span></td><td>{{item.abono.requerido | currency}}</td>
+                                </tr>  
+                            <tr>
+                                <td><span>ABONO LIQUIDADO : </span></td><td>{{item.abono.liquidado | currency}}</td> 
+                                </tr>  
+                            </table> 
+                        </div>
+                </div>
+
+            </div>
+
+
 </ion-content>
 </ion-tab>
 
 <ion-tab title="Historial" icon-on="icon ion-ios-people" icon-off="icon ion-ios-people">
 <ion-content class="center bg">
+ <div style="padding: 20px;" ng-if="Historial.length == 0">
+            <center><h1>Actualmente no tiene historial de reservas</h1></center>
+                </div>
+                <div style="padding:20px" ng-if="Historial.length > 0">
+
+
+ <h2><span style='font-size: 16px;color:#FFF;'>MIS</span><br>RESERVAS</h2>
+       <div class="separador"></div>
+
+                <div class="box-transparent" style="width:80%;padding-bottom: 10px;">
+            <table width="100%" border="0">
+
+                <tr>
+                    <td><div class="num-big" id="cumplidas">{{estadisticas.reservas.cumplidas}}</div></td>
+                    <td><div class="num-big" id="incumplidas" style="color:#3A4A4B">{{estadisticas.reservas.incumplidas}}</div></td>
+                    <td><div class="num-big" id="canceladas" style="color:#3A4A4B">{{estadisticas.reservas.canceladas}}</div></td>
+                </tr>
+                <tr>
+                    <td>CUMPLIDAS</td>
+                    <td>INCUMPLIDAS</td>
+                    <td>CANCELADAS</td>
+                </tr>
+            </table>                
+        </div>
+        <br><br>
+
+                    <div class='contenedor-reserva' ng-repeat="item in Historial">
+                        <span>Sitio : </span>{{item.sitio.nombre}}<br>
+                        <span>Cancha : </span>{{item.cancha.nombre}}<br>
+                        <span>Fecha : </span>{{item.fecha.anio}}/{{item.fecha.mes}}/{{item.fecha.dia}}<br>
+                        <span>Hora : </span>{{item.hora.desde}}<br>
+                        <span>Estado : </span>
+                        <a href='javascript:;' ng-click='informacionEstado(item.estado)'>
+                        <estado ng-if="item.estado == 'esperandoRevision'">Esperando Revision</estado> 
+                        <estado ng-if="item.estado == 'esperandoConfirmacion'">Esperando Confirmacion</estado>
+                        <estado ng-if="item.estado == 'confirmadaSinAbono'">Confirmada sin Abono</estado> 
+                        <estado ng-if="item.estado == 'confirmadaConAbono'">Confirmada Con Abono</estado>
+                        <estado ng-if="item.estado == 'cumplida'">Cumplida</estado>
+                        <estado ng-if="item.estado == 'cancelada'">Cancelada</estado>
+                        <estado ng-if="item.estado == 'incumplida'">Imcumplida</estado>
+                         </a>
+                        
+                        <div style='margin-top:10px;' ng-if="item.estado == 'esperandoConfirmacion'">
+                        <span>PRECIO : </span>{{item.valor}}<br>
+                        <span>ABONO REQUERIDO : </span>{{item.abono.requerido}}<br>
+                        <button  class='btn-reset btn-terciario' onclick='reservas.cambiar_estado(item._id, 4)'>Confirmar </button>
+                        <button class='btn-reset btn-danger' style='margin-left:5px;' onclick='reservas.cambiar_estado(item._id, 5)'>Cancelar Reserva</button>
+                    </div>
+
+                    <div style="margin-top:10px" ng-if="item.estado == 'confirmadaSinAbono'">
+                        <table>
+                            <tr>
+                                <td><span>PRECIO : </span></td><td>{{item.valor}}</td>
+                            </tr>
+                            <tr>
+                                <td><span>ABONO REQUERIDO :</span></td><td>{{item.abono.requerido}}</td>
+                            </tr>  
+                            <tr>
+                                <td><span>ABONO LIQUIDADO : </span></td><td>{{item.abono.liquidado}}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div style='margin-top:10px;' ng-if="item.estado == 'confirmadaConAbono'">
+                        <table>
+                            <tr>
+                                <td><span>PRECIO : </span></td><td>{{item.valor}}</td>
+                                </tr>
+                            <tr>
+                                <td><span>ABONO REQUERIDO :</span></td><td>{{item.abono.requerido}}</td>
+                                </tr>  
+                            <tr>
+                                <td><span>ABONO LIQUIDADO : </span></td><td>{{item.abono.liquidado}}</td> 
+                                </tr>  
+                            </table> 
+                        </div>
+                        
+                    </div>
+                </div>
 </ion-content>
 </ion-tab>
 

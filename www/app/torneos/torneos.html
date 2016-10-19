@@ -1,0 +1,64 @@
+<ion-view  title="Torneos">
+<ion-content overflow-scroll="true">
+<ion-tabs class="tabs-positive tabs-icon-top">
+<ion-tab title="Oferta de Torneos" icon-on="icon ion-trophy" icon-off="icon icon ion-flag">
+  <ion-content class="center bg">
+  	 <h2>
+        <span style='font-size: 16px;color:#FFF;'>OFERTA DE</span><br>CAMPEONATOS
+      </h2>
+         <div class="separador"></div>
+ <div class="row">     
+    <div ng-if="Torneos.length == 0">
+       No hay Proximos torneos en oferta
+     </div>
+   </div>
+
+ 
+     <div class="row contenedor-reserva" ng-repeat="item in Torneos">
+     <div class="col">
+        <span>Sitio: </span>{{item.sitio.nombre}}
+         <br><span>Torneo: </span>{{item.nombre}}
+         <br><span>Fecha de inicio: </span>{{normalFecha(item.fecha)}}
+         <br><span>Categoria: </span>{{item.categoria}}
+         <br><span>Jugadores por Equipo:</span> {{item.jugadores}}
+         <br><span>Valos de la Inscripción:</span> {{item.valor | currency}}
+             <br><span>Valor de Arbitraje:</span> {{item.arbitraje | currency}}
+             <br><span>Cupos:</span> {{item.cupos}}
+             <br><span>Cupos disponibles:</span>{{item.cupos - item.nominasInscritas.length}}
+             <br><button class="btn bg-btn-red" style="width: 80%" ng-click="inscribirTorneo(item._id)"  ng-if="inscrito(item._id) !=  true ">INSCRIBIR NOMINA</button>
+       <div ng-if="inscrito(item._id) ==  true" class="btn bg-btn-green" style="text-align:center">INSCRITO</div>
+       </div>
+   </div>
+
+
+  </ion-content>
+</ion-tab>
+<ion-tab title="Mis Torneos" icon-on="icon ion-flag" icon-off="icon ion-flag">
+  <ion-content class="center bg">
+   <h2>
+        <span style='font-size: 16px;color:#FFF;'>MIS</span><br>CAMPEONATOS
+      </h2>
+         <div class="separador" ></div>
+
+         <div  ng-repeat="item in torneosInscritos" class='contenedor-reserva'>
+        <span>Sitio: </span>{{item.sitio.nombre}}
+         <br><span>Torneo: </span>{{item.nombre}}
+         <br><span>Fecha de inicio: </span>{{normalFecha(item.fecha)}}
+         <br><span>Categoria: </span>{{item.categoria}}
+         <br><span>Jugadores por Equipo:</span> {{item.jugadores}}
+         <br><span>Valos de la Inscripción:</span> {{item.valor | currency}}
+             <br><span>Valor de Arbitraje:</span> {{item.arbitraje | currency}}
+         <center>
+             <br>
+             <h2 style="font-size:14px">Iniciará dentro de:</h2>
+                 <span class="reloj"><h1>09:03:25:05</h1></span>
+         </center>
+        </div>
+        <div ng-if="torneosInscritos.length == 0">
+            No te encuentras Inscrito de ningún torneo
+        </div>
+
+  </ion-content>
+</ion-tab>
+</ion-tabs>
+</ion-content>

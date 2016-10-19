@@ -99,9 +99,28 @@
  <ion-tab title="Nominas A las que pertenezco" icon-on="icon ion-android-contact" icon-off="icon ion-android-contact">
 
 <ion-content class="center bg">
+
    <h2><span style='font-size: 16px;color:#FFF;'>NOMINAS A LAS QUE</span><br>PERTENEZCO</h2>
               <div class="separador" style="width:15%;margin-left: 42.5%;"></div>
     
+    <div ng-if="NominasPertenezco.length == 0">
+            Actualmente no has sido fichado por ninguna nomina
+        </div>
+        
+
+        <table width="100%" align="center" class="tabla">
+            <tr ng-repeat="item in  NominasPertenezco| filter:filtro" ng-click="verNomina(item.capitan._id)"  style="cursor: pointer">
+              <td  width="32"><div class="ranking-num-list circle">{{$index + 1}}</div></td>
+              <td style="padding-top:5px;padding-bottom: 5px;">
+                <img src="http:\\localhost:3000/images/usuarios/nomina-profile.png" alt="" style="width:70px;border-radius:10px;" ng-if="item.escudo == 'false'"/>
+                <img src="http:\\localhost:3000/image/nominas/{{item._id}}.jpg" alt="" style=" width: 70px;border-radius:10px" ng-if="item.escudo == 'true'"/>
+              </td>
+              <td>{{item.nombre}}</td>
+              <td><div class="num-list">{{item.puntos}}</div></td>
+              <td></td>
+            </tr>
+          </table>
+
  </ion-content>
 
 </ion-tab>

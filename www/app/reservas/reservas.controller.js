@@ -6,7 +6,7 @@
         .controller('reservasCtrl',  reservasCtrl);
 
     /* @ngInject */
-    function reservasCtrl($scope,$http, API_URL,$state,$ionicModal,$sce) {
+    function reservasCtrl($scope,$http, API_URL,$state,$ionicModal,$sce,$ionicPopup) {
 
     	 $scope.$on('$ionicView.loaded',function(){
           //declarar escopes y funciones iniciales
@@ -24,6 +24,8 @@
         $scope.ReservasPendientes = [];
         $scope.estadisticas = [];
         $scope.Historial = [];
+        $scope.agenda = "";
+        $scope.calendar = "";
 
         $scope.listaSitios = true;
         $scope.canchaView = false;
@@ -36,28 +38,26 @@
         $scope.tabReservas = "";
 
    		 $scope.getSitios();
-
+         $scope.getMisReservasActivas();
+           $scope.historial();
+           $scope.misEstadisticas();
         });
 
     	  
   
         $scope.getMisReservasActivas = function () {
-             var res = menuFactory.updateMenu(2);
             var data_usuario = JSON.parse(localStorage.getItem('data_usuario'));
-            $http.get('/reservasPendientes/' + data_usuario._id).success(function (data) {
+            $http.get(API_URL+'reservasPendientes/' + data_usuario._id).success(function (data) {
                 $scope.ReservasPendientes = data.respuesta;
             });
         }
 
         $scope.misEstadisticas = function () {
             var data_usuario = JSON.parse(localStorage.getItem('data_usuario'));
-            $http.get('/usuario/' + data_usuario._id + '/estadisticas').success(function (data) {
+            $http.get(API_URL+'usuario/' + data_usuario._id + '/estadisticas').success(function (data) {
                 $scope.estadisticas = data.respuesta[0];
                 
                
-                          $('#cumplidas').animateNumber({ number:$scope.estadisticas.reservas.cumplidas});
-                          $('#incumplidas').animateNumber({ number:$scope.estadisticas.reservas.incumplidas});
-                          $('#canceladas').animateNumber({ number:$scope.estadisticas.reservas.canceladas});
                      
      
             });
@@ -81,7 +81,7 @@
             $scope.sitioView = false;
             $scope.listaCanchas = false;
             $scope.calendario = false;
-           
+           $scope.horas= false;
 
            $scope.sapo = false;
            $scope.tabSitios = "activo";
@@ -110,7 +110,7 @@
             $scope.sitioView = true;
             $scope.listaCanchas = true;
             $scope.calendario = false;
-
+             $scope.horas= false;
 
                 $http.get(API_URL+"canchas/" + $scope.Sitio._id).success(function (data) {
                     $scope.canchas = data.respuesta;
@@ -124,14 +124,16 @@
 
         $scope.cargarMeses = function (cancha) {
 
+
             $scope.sapo = true;
             $scope.Cancha = cancha;
             $scope.Meses = calendario.calendario();
 
-            
+            $scope.calendario = true;
             $scope.listaCanchas = false;
              $scope.canchaView = true;
              $scope.calendario = true;
+              $scope.horas= false;
 
             $scope.tabSitios = "";
 			$scope.tabCanchas = "";
@@ -228,7 +230,7 @@
                     $scope.calendar =  $sce.trustAsHtml(dia);
                 
                   
-                   //$scope.getAgendaDiaByCancha(mes, d.getDate())
+                $scope.getAgendaDiaByCancha(mes, d.getDate())
 
                }
             }
@@ -236,17 +238,23 @@
 
 
         $scope.getAgendaDiaByCancha = function (mes, dia) {
+
+
+
+
             var horaReservas = "";
-            document.getElementById("listaHoras").innerHTML = "";
-            document.getElementById("horas").style.display = "block";
+             $scope.horas= true;
+           
 
             for (var h = 0; h <= 23; h++)
             {
 
-                horaReservas = "<tr><td width='10px'   valign='top'>" + h + ":00</td><td><button id='" + h + ":00' class='hora btn-reset' onclick='angular.element(this).scope().reservar_cancha(" + h + "," + dia + "," + mes + ")'>RESERVAR</button></td></tr>"
-                $('#listaHoras').append(horaReservas);
+                horaReservas += "<tr><td width='10px'   valign='top' style='font-size:14px;'>" + h + ":00</td><td><button id='" + h + ":00' class='hora btn-reset' onclick='angular.element(this).scope().reservar_cancha(" + h + "," + dia + "," + mes + ")'>RESERVAR</button></td></tr>"
+               
             }
 
+
+             $scope.agenda =  $sce.trustAsHtml(horaReservas);
 
             var mesString = mes.toString();
             var diaString = dia.toString();
@@ -264,12 +272,12 @@
             var anio = calendario.anio_actual();
             var fecha = anio + "-" + mesString + "-" + diaString;
 
-            $http.get('/reservas/' + $scope.Cancha._id + '/' + fecha).success(function (data) {
+            $http.get(API_URL+'reservas/' + $scope.Cancha._id + '/' + fecha).success(function (data) {
                 var listaAgenda = data.respuesta;
 
                 if (listaAgenda.length > 0)
                 {
-                    for (i = 0; i <= listaAgenda.length; i++)
+                    for (var i = 0; i < listaAgenda.length; i++)
                     {
 
                         document.getElementById(listaAgenda[i].hora.desde).innerHTML = "RESERVADO";
@@ -278,6 +286,8 @@
                         //dia y hora actual si es menor a la actual no se puede reservar
                     }
                 }
+
+              
 
             });
 
@@ -288,23 +298,26 @@
             var d = new Date();
             var di = new Date();
             if (d.getHours() >= hora && di.getDate() == dia) {
-                sweetAlert("Oops...", "Imposible devolver el tiempo!", "error");
+
+                var alertPopup = $ionicPopup.alert({
+                 title: 'Oops!',
+                 template: 'Imposible devolver el tiempo!'
+               });
+
+               
             } else {
 
                 var data_usuario = JSON.parse(localStorage.getItem('data_usuario'));
 
-                swal(
-                        {title: "Confirmar reserva",
-                            text: "Esta seguro que desea reservar la cancha a las " + hora + ":00, el dia: " + dia + " del mes: " + mes,
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "Si, Reservar!",
-                            cancelButtonText: "No, Cancelar!",
-                            closeOnConfirm: false, closeOnCancel: false
-                        }, function (isConfirm) {
-                    if (isConfirm) {
-                        mes = mes.toString();
+
+ var confirmPopup = $ionicPopup.confirm({
+         title: 'Confirmar Reserva',
+         template: "Esta seguro que desea reservar la cancha a las " + hora + ":00, el dia: " + dia + " del mes: " + mes
+      });
+
+      confirmPopup.then(function(res) {
+         if(res) {
+            mes = mes.toString();
                         dia = dia.toString();
                         if (mes.length === 1) {
                             mes = "0" + mes;
@@ -335,20 +348,39 @@
                         };
 
                       
-                            $http.post('/reservas', obj).success(function (data) {
+                            $http.post(API_URL+'reservas', obj).success(function (data) {
                           
                                 if (data.res === true) {
                                     $scope.getMisReservasActivas();
-                                    swal("Excelente!",data.msg, "success");
+
+                                      var alertPopup = $ionicPopup.alert({
+                                         title: "Excelente",
+                                         template:  data.msg
+                                       });
+
+                                    
                                 } else {
-                                    sweetAlert("Oops...",data.msg, "error");
+                                    var alertPopup = $ionicPopup.alert({
+                                         title: "Oops",
+                                         template:  data.msg
+                                       });
+
+                                  
                                 }
                             });
-                        
-                    } else {
-                        swal("Cancelado", "Has cancelado el proceso de reserva :(", "error");
-                    }
-                });
+           
+         } else {
+            var alertPopup = $ionicPopup.alert({
+                 title: "Cancelado",
+                 template:  'Has cancelado el proceso de reserva :('
+               });
+
+          
+         }
+      });
+        
+
+              
             }
         }
 
@@ -356,39 +388,77 @@
             switch (estado)
             {
                 case 'esperandoRevision':
-                    sweetAlert("Esperando revisión", "Deberás esperar a que el sitio donde has hecho la reserva  revise tu solicitud, está atento pronto enviarán respuesta.");
+
+
+                var alertPopup = $ionicPopup.alert({
+                 title: 'Esperando revisión',
+                 template:  'Deberás esperar a que el sitio donde has hecho la reserva  revise tu solicitud, está atento pronto enviarán respuesta.'
+               });
+
                     break;
                 case 'esperandoConfirmacion':
-                    sweetAlert("Esperando confirmación", "El sitio esta esperando que confirmes tu reserva ");
+
+                 var alertPopup = $ionicPopup.alert({
+                 title: "Esperando confirmación",
+                 template:  'El sitio esta esperando que confirmes tu reserva.'
+               });
+
+               
                     break;
                 case 'confirmadaSinAbono':
-                   sweetAlert("Confirmado sin abono", "Haz confirmado tu reserva, pero a un no se registra ningún abono. Si hay un abono requerido deberás acercarte al sitio y cancelar el abono, de lo contrario pueden cancelar tu reserva.  ");
+
+                 var alertPopup = $ionicPopup.alert({
+                 title: "Confirmado sin abono",
+                 template:  'Haz confirmado tu reserva, pero a un no se registra ningún abono. Si hay un abono requerido deberás acercarte al sitio y cancelar el abono, de lo contrario pueden cancelar tu reserva.'
+               });
+
                     break;
                 case 'confirmadaConAbono':
-                    sweetAlert("Confirmado con abono", "Haz confirmado tu reserva y te haz acercado a abonar, ahora tu reserva está segura. Te esperamos en la fecha y hora acordada. ");
+
+                 var alertPopup = $ionicPopup.alert({
+                 title: "Confirmado con abono",
+                 template:  'Haz confirmado tu reserva y te haz acercado a abonar, ahora tu reserva está segura. Te esperamos en la fecha y hora acordada.'
+               });
+
+                   
                     break;
                 case 'cumplida':
-                    sweetAlert(" Cumplida", "Muy bien, haz cumplido con tu reserva. ");
+
+                var alertPopup = $ionicPopup.alert({
+                 title: "Cumplida",
+                 template:  'Muy bien, haz cumplido con tu reserva.'
+               });
+
+                
                     break;
                 case 'incumplida':
-                    sweetAlert("Estado"," Incumplida. Muy mal, haz incumplido con tu reserva, esto bajara tu creebilidad y te bajara puntos. ");
+
+                 var alertPopup = $ionicPopup.alert({
+                 title: "Incumplida",
+                 template:  'Muy mal, haz incumplido con tu reserva, esto bajara tu creebilidad y te bajara puntos.'
+               });
+
+                   
                     break;
                 case 'cancelada':
-                    sweetAlert("Cancelada","Tu reserva ha sido cancelada. ");
+                    var alertPopup = $ionicPopup.alert({
+                 title: "Cancelada",
+                 template:  'Tu reserva ha sido cancelada.'
+               });
                     break;
             }
         }
         
         $scope.historial = function(){
-             $("#historial").modal();
             $scope.getHistorial();  
         }
         
         $scope.getHistorial = function(){
+
          var data_usuario = JSON.parse(localStorage.getItem('data_usuario'));
-           $http.get('/reservas/' + data_usuario._id).success(function (data) {
+           $http.get(API_URL+'reservas/' + data_usuario._id).success(function (data) {
                 $scope.Historial = data.respuesta;
-                console.log($scope.Historial);
+                
             });
         }
         
@@ -426,7 +496,7 @@ if(nuevoEstado=="cancelada"){
         },
         function(isConfirm){   
             if (isConfirm) {    
-                $http.put('/reserva',object).success(function (data) {
+                $http.put(API_URL+'reserva',object).success(function (data) {
                 swal("Cancelada!", "La reserva ha sido cancelada con exito", "success"); 
                 $scope.getMisReservasActivas();
             });
@@ -437,8 +507,12 @@ if(nuevoEstado=="cancelada"){
             } 
         });
 }else{
-   $http.put('/reserva',object).success(function (data) {
-                swal("Confirmada!", "La reserva ha sido confirmada con exito", "success");
+   $http.put(API_URL+'reserva',object).success(function (data) {
+
+    var alertPopup = $ionicPopup.alert({
+                 title: "Confirmada",
+                 template:  'La reserva ha sido confirmada con exito.'
+               });
                 $scope.getMisReservasActivas();
             }); 
 }

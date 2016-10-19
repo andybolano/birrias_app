@@ -1,0 +1,225 @@
+<ion-view  title="Retos">
+<ion-content overflow-scroll="true">
+<ion-tabs class="tabs-positive tabs-icon-top">
+<ion-tab title="Retos" icon-on="icon ion-ios-football" icon-off="icon icon ion-ios-football">
+  <ion-content class="center bg">
+
+
+       <h2><span style='font-size: 16px;color:#FFF;'>BUSCADOR</span><br>DE NOMINAS</h2>
+      	<div class="separador"></div>
+<br>
+<div style="width:90%;margin-left:5%">
+        <input type="text" class="box-text" ng-model="filtro" style="margin-top:10px;color:#FFF" placeholder="Buscar Nomina" >
+
+          <table width="100%" align="center" class="tabla">
+            <tr ng-repeat="item in Nominas| filter:filtro" ng-click="initReto(item)" style="cursor: pointer">
+              <td  width="32"><div class="ranking-num-list circle">{{$index + 1}}</div></td>
+              <td style="padding-top:5px;padding-bottom: 5px;">
+                <img src="http:\\localhost:3000/images/usuarios/nomina-profile.png" alt="" style="width:50px;border-radius:10px;" ng-if="item.escudo == 'false'"/>
+                <img src="http:\\localhost:3000/image/nominas/{{item._id}}.jpg" alt="" style=" width: 50px;border-radius:10px" ng-if="item.escudo == 'true'"/>
+              </td>
+              <td>{{item.nombre}}</td>
+              <td><div class="num-list">{{item.puntos}}</div></td>
+              <td></td>
+            </tr>
+          </table>
+        
+</div>
+
+
+  </ion-content>
+</ion-tab>
+<ion-tab title="Retos Pendientes" icon-on="icon ion-ios-football-outline" icon-off="icon ion-ios-football-outline">
+  <ion-content class="center bg">
+    <h2><span style='font-size: 16px;color:#FFF;'>MIS RETOS</span><br>PENDIENTES</h2>
+      <div class="separador" style="width:30%;"></div>
+      <br>
+<div ng-if="RetosPendientes.length == 0">
+            No Hay proximos Retos
+        </div>
+      <div ng-repeat="item in RetosPendientes" class='contenedor-reserva'>
+
+        <div ng-if="item.retador._id == miNomina">
+          <span >Nomina Retada :</span><a href="javascript:;" ng-click="verNomina(item.retado.capitan)">{{item.retado.nombre}}</a><br>
+        </div>
+        <div ng-if="item.retado._id == miNomina">
+          <span>Nomina Retadora :</span><a href="javascript:;" ng-click="verNomina(item.retador.capitan)">{{item.retador.nombre}}</a><br>
+        </div>
+
+        <span>Tipo :</span>{{item.pago}}<br>
+        <span>Puntos Apostados : </span> {{item.puntos}}<br>
+        <span>Lugar : </span> {{item.reserva.sitio.nombre}}<br>
+        <span>Cancha :</span> {{item.reserva.cancha.nombre}}<br>
+        <span>Fecha : </span>{{item.reserva.fecha.dia}}-{{item.reserva.fecha.mes}}-{{item.reserva.fecha.anio}}<br>
+        <span>Hora : </span> {{item.reserva.hora.desde}}<br>
+        <span>Estado :</span> <a href='javascript:;' ng-click='informacionEstado(item.estado)'>{{item.estado}}</a><br>
+        
+        <div ng-if="item.retado._id == miNomina && item.estado == 'PENDIENTE'">
+          <button  class='btn-reset btn-terciario' ng-click='actualizar_estado_reto(item._id, 1)'>Acepto el Reto</button>
+           <button class='btn-reset btn-danger' style='margin-left:5px;' ng-click='actualizar_estado_reto(item._id,0)'>Rechazar Reto</button>
+        </div>
+        
+      </div>
+  </ion-content>
+</ion-tab>
+</ion-tabs>
+</ion-content>
+
+ <script id="nuevo.html" type="text/ng-template">
+      <ion-modal-view>
+        <ion-header-bar class="bar bar-header bar-positive">
+          <h1 class="title">NUEVO RETO</h1>
+          <button class="button button-clear button-primary" ng-click="modal.hide()">Cancelar</button>
+        </ion-header-bar>
+
+   <ion-tabs class="tabs-positive tabs-icon-top">
+        <ion-tab title="Nuevo retos" icon-on="icon ion-ios-football" icon-off="icon icon ion-ios-football">
+           <ion-content class="center bg">
+           <br><br><br><br>
+
+        <div class="row">
+                 <div class="col col-40">
+             <div class="ranking-num-list circle" style="z-index:30;position: absolute;margin-top: -20px;margin-left:15%;width:34px;height: 34px;padding:5px;">{{$index+1}}</div>
+
+                   <img src="http:\\localhost:3000/images/usuarios/nomina-profile.png" alt="" style="width:90%;border-radius:10px;" ng-if="Reto.nominaRetadora.nomina.escudo == 'false'"/>
+                 <img src="http:\\localhost:3000/image/nominas/{{Reto.nominaRetadora.nomina._id}}.jpg" alt="" style="z-index:20;height:100px; width:90%;border-radius:10px;border:5px solid #2C3B3C" ng-if="Reto.nominaRetadora.nomina.escudo == 'true'"/>
+                   <h4 style="color:#FFF"> {{Reto.nominaRetadora.nomina.nombre}}</h4>
+                   <div class="num-list" style="font-size: 24px;">{{Reto.nominaRetadora.nomina.puntos - Reto.range}}</div>
+         
+              </div>
+              <div class="col col-20">
+              		  <h2 style="margin-top:0%;">VS</h2>
+                    
+			    </div>
+              
+              <div class="col col-40">
+              	 <div class="ranking-num-list circle" style="z-index:30;position: absolute;margin-top: -20px;margin-left:15%;width:34px;height: 34px;padding:5px;">{{$index+1}}</div>
+                  <img src="http:\\localhost:3000/images/usuarios/nomina-profile.png" alt="" style="width:90%;height:100px;border-radius:10px;border:5px solid #2C3B3C" ng-if="Reto.nominaRetada.escudo == 'false'"/>
+                 
+                  <img src="http:\\localhost:3000//image/nominas/{{Reto.nominaRetada._id}}.jpg" alt="" style="z-index:20; width:90%;height:100px;border-radius:10px;border:5px solid #2C3B3C" ng-if="Reto.nominaRetada.escudo == 'true'"/>
+              
+                  <h4 style="color:#FFF">{{Reto.nominaRetada.nombre}}</h4>
+                  <div class="num-list" style="font-size: 24px;">{{Reto.nominaRetada.puntos}}</div>
+              </div>
+        </div> 
+        <div class="row">
+       	 	<div class="col  col-offset-5">
+     		<br>
+
+
+					    <label class = "item item-input item-select item-dark">
+					   <div class = "input-label">
+					     TIPO DE RETO
+					   </div>
+	
+					   <select ng-model="Reto.modalidad">
+					        	<option value="PIERDE Y PAGA" selected>PIERDE Y PAGA</option>
+								    <option  value="MITAD Y MITAD">MITAD Y MITAD</option>
+								     <option  value="YO INVITO">YO INVITO</option>
+					   </select>
+
+            
+
+					</label>
+
+
+       	 				
+
+			                  <div style="margin-top: 20px;">
+			                  <h3>Apostar Puntos</h3>
+			                  <br>
+			                  
+			                  <div class="range">
+			                      <input name="range" type="range" min="0" max="" id="apuestaPuntos" ng-model="Reto.range" ng-change="pintar();">
+			                      <br>
+			                      <div class="range-output">
+							        <output class="output num-list" style="font-size: 24px;" name="output" for="range">
+							          {{Reto.range}}
+							        </output>
+								      </div>
+								    </div>
+								 </div>
+
+        	</div>
+        </div>  
+        <div class="row center">
+
+        	<div class="col">
+                <h3><span style='font-size: 16px;'>QUE DIA Y A QUE HORA DESEAS JUGAR?</span></h3>
+                </div>
+         </div>
+                <br><br>
+            <table width="90%" style="margin-left:5%">
+                <tr>
+                    <td style="text-align: center;"></td>
+                    <td style="text-align: center;">Formato de hora militar</td>
+                 	<td width="20%"></td>
+                </tr>
+                <tr>
+                    <td style="padding-right: 10px">
+
+                    <label class="item item-input box-text">
+                      <span class="input-label">Fecha</span>
+                      <input type="date" class="box-text" ng-model="Reto.fecha" style="color:#FFF" placeholder="yyyy-MM-dd" min="2016-10-19" max="2016-12-31">
+                    </label>
+                   
+
+                    </td>
+                    <td style="padding-right: 10px"><input type="time" class="box-text" ng-model="Reto.hora" style="color:#FFF" name="hora" value="00:00" ></td>
+                    <td>
+                     <button class="btn bg-btn-red"  ng-click="buscarDisponibilidad();"><i class="ion-search"></i></button>
+                    </td>
+                </tr>
+            </table>
+            
+
+                <div style="margin-top: 10px;font-size: 14px;">
+                    {{Reto.fecha}}  -  {{Reto.hora}} 
+                </div>
+                <br>
+                <h3><span style='font-size: 16px;'>LUGAR DEL RETO</span></h3>
+                 <div style="margin-top: 10px;font-size: 24px;">
+                {{Reto.lugar.sitio.nombre}} -
+                {{Reto.lugar.nombre}}
+                 </div>
+                 <br>
+                <button class="btn bg-btn-red"  ng-click="guardarReto();" style="width: 40%;">RETAR</button>
+            <br><br><br><br>
+
+               
+          
+        </ion-content>
+        </ion-tab>
+        <ion-tab title="Disponibilidad de Canchas" icon-on="ion-ios-calendar-outline" icon-off="ion-ios-calendar-outline">
+           <ion-content class="center bg">
+            <br><br>
+            <h2><span style='font-size: 16px;color:#FFF;'>DISPONIBILIDAD DE</span><br>CANCHAS</h2>
+                    <div class="separador"></div>
+
+                    <div ng-if="Reto.fecha == undefined &&  Reto.hora == undefined" style="margin-top: 30px;">
+                     <center>Escoge una fecha y una hora en la quieres jugar</center>
+                 </div>
+                 <br>
+                
+                 <div class="list" >
+            <a class="item item-thumbnail-left card"   ng-repeat="item in canchasDisponibles" ng-click="seleccionarCancha(item)">
+              <img src='http:\\localhost:3000/image/canchas/{{item._id}}.jpg'>
+              <h2>{{item.sitio.nombre}}</h2>
+              <p>cancha: {{item.nombre}}</p>
+              <p>Techo: {{item.techo}}</p>
+              <p>Jugadores sugeridos por equipo:{{item.jugadores}}</p>
+              <p>  Medidas:{{item.medidas.longitud}} x {{item.medidas.ancho}} </p>
+            </a>
+            </div>
+                    
+                   
+                </div>
+            </ion-content>
+        </ion-tab>
+        </ion-tabs>
+      </ion-modal-view>
+    </script>
+
+
+</ion-view>
+

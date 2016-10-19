@@ -6,12 +6,21 @@
         .controller('usuarioCtrl', usuarioCtrl);
 
     /* @ngInject */
-    function usuarioCtrl($scope,$http, API_URL,$state, usuarioService) {
+    function usuarioCtrl($scope,$http, API_URL,$state, usuarioService,$ionicModal) {
         $scope.$on('$ionicView.loaded',function(){
             $scope.usuario = [];
             $scope.amigos = [];
             $scope.proximosPartidos = [];
+            $scope.Usuarios = [];
             loadPerfil();
+
+             $ionicModal.fromTemplateUrl('nuevo.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+              }).then(function(modal) {
+                $scope.modal = modal;
+              })
+
         });
 
         function loadPerfil(){  
@@ -65,7 +74,28 @@
             
         });
     }
+
+     $scope.buscarAmigos = function(){
+
+            $scope.openModal();       
+        };
         
+
+         $scope.openModal = function() {
+                    $scope.modal.show();
+                    $scope.getUsuarios();
+                  };
+
+                  $scope.getUsuarios = function(){
+            var data_usuario = JSON.parse(localStorage.getItem('data_usuario'));
+          
+                         $http.get(API_URL+'usuario/lista/'+data_usuario._id).success(function (data) {
+        
+                    $scope.Usuarios = data;  
+             });  
+        };
+
+
 
     }
 })();
